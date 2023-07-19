@@ -28,9 +28,3 @@ namespace Blog.Infrastructure.Database
         }
     }
 }
-
-//            Id = Guid.NewGuid();
-//Title = title;
-//Content = content;
-//CreatedDate = DateTime.Now;
-//UpdatedDate = DateTime.Now;
