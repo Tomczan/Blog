@@ -21,7 +21,7 @@ namespace Blog.Infrastructure.Repositories
 
         public async Task<Post> GetById(Guid id)
         {
-            var post = await _dbContext.Posts.FirstAsync(p => p.Id == id);
+            var post = await _dbContext.Posts.FirstOrDefaultAsync(p => p.Id == id);
             return post;
         }
 

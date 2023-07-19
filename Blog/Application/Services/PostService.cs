@@ -45,19 +45,15 @@ namespace Blog.Application.Services
                 throw new Exception($"Post with {postId} does not exist.");
             }
 
-            var updatedPost = await _postRepository.Update(post);
+            post.Update(newTitle, newContent);
+            await _postRepository.Update(post);
 
-            return updatedPost;
+            return post;
         }
 
         public async Task<Post> GetPost(Guid postId)
         {
             return await _postRepository.GetById(postId);
-        }
-
-        void IPostService.DeletePost(Guid postId)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<List<Post>> GetAllPosts()

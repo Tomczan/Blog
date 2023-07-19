@@ -18,9 +18,7 @@ namespace Blog.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePost(string title, string content)
         {
-            var post = await _postService.CreatePost(title, content);
-
-            return Ok(post);
+            return Created("", await _postService.CreatePost(title, content));
         }
 
         [HttpGet("{id}")]
@@ -39,12 +37,20 @@ namespace Blog.Web.Controllers
             return posts;
         }
 
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> UpdatePost(Guid id, string title, string content)
         {
             var post = await _postService.UpdatePost(id, title, content);
 
             return Ok(post);
+        }
+
+        [HttpDelete]
+        public IActionResult DeletePost(Guid id)
+        {
+            _postService.DeletePost(id);
+
+            return Ok(id);
         }
     }
 }
