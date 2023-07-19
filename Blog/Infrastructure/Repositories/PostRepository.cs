@@ -1,9 +1,7 @@
 ﻿using Blog.Domain.Interfaces;
 using Blog.Domain.Models;
-using System;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using Blog.Infrastructure.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Infrastructure.Repositories
 {
@@ -16,26 +14,33 @@ namespace Blog.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public Post GetById(Guid id)
+        public async Task<List<Post>> GetAll()
+        {
+            return await _dbContext.Posts.ToListAsync();
+        }
+
+        public async Task<Post> GetById(Guid id)
         {
             return _dbContext.Posts.FirstOrDefault(p => p.Id == id);
         }
 
-        public void Create(Post post)
+        public async Task<Post> Create(Post post)
         {
             _dbContext.Posts.Add(post);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
+            return post;
         }
 
-        public void Update(Post post)
+        public async Task<Post> Update(Post post)
         {
             _dbContext.Posts.Update(post);
             _dbContext.SaveChanges();
+            return post;
         }
 
-        public void Delete(Guid id)
+        public async void Delete(Guid id)
         {
-            var post = GetById(id);
+            var post = await GetById(id);
             if (post != null)
             {
                 _dbContext.Posts.Remove(post);

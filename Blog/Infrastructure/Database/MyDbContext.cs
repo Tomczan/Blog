@@ -5,19 +5,32 @@ namespace Blog.Infrastructure.Database
 {
     public class MyDbContext : DbContext
     {
-        public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
+        public MyDbContext()
         {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            DbPath = Path.Join(path, "BlogDB.db");
         }
 
-        public DbSet<Post> Posts { get; set; }
+        public virtual DbSet<Post> Posts { get; set; }
+        public string DbPath { get; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            // Konfiguracje modelu danych
-            // modelBuilder.Entity<Post>().ToTable("Posts");
-            // ...
+            options.UseSqlite($"Data Source={DbPath}");
+            options.EnableSensitiveDataLogging();
+            options.LogTo(Console.WriteLine);
+        }
 
-            base.OnModelCreating(modelBuilder);
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.Entity<Post>();
         }
     }
 }
+
+//            Id = Guid.NewGuid();
+//Title = title;
+//Content = content;
+//CreatedDate = DateTime.Now;
+//UpdatedDate = DateTime.Now;

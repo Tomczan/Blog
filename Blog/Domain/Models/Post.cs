@@ -9,6 +9,8 @@
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
 
+        public Post() { }
+
         public Post(string title, string content)
         {
             Id = Guid.NewGuid();

@@ -16,21 +16,27 @@ namespace Blog.Web.Controllers
         }
 
         [HttpPost]
-        public Task<IActionResult> CreatePost(Post post)
+        public async Task<IActionResult> CreatePost(string title, string content)
         {
-            _postService.CreatePost(post.Title, post.Content);
+            var post = await _postService.CreatePost(title, content);
 
-            return Task.FromResult<IActionResult>(CreatedAtAction(nameof(GetPost), new { id = post.Id }, post));
+            return Ok(post);
         }
 
         [HttpGet("{id}")]
-        public Task<IActionResult> GetPost(Guid id)
+        public async Task<IActionResult> GetPost(Guid id)
         {
-            var post = _postService.GetPost(id);
-            if (post == null)
-                return Task.FromResult<IActionResult>(NotFound());
+            var post = await _postService.GetPost(id);
 
-            return Task.FromResult<IActionResult>(Ok(post));
+            return Ok(post);
+        }
+
+        [HttpGet]
+        public async Task<List<Post>> GetAllPosts()
+        {
+            var posts = await _postService.GetAllPosts();
+
+            return posts;
         }
     }
 }

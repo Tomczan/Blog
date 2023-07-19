@@ -8,8 +8,10 @@ namespace Blog.Application.Interfaces
 
         Task<Post> UpdatePost(Guid postId, string newTitle, string newContent);
 
-        Task<Post> DeletePost(Guid postId);
+        void DeletePost(Guid postId);
 
         Task<Post> GetPost(Guid postId);
+
+        Task<List<Post>> GetAllPosts();
     }
 }

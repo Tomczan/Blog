@@ -4,11 +4,13 @@ namespace Blog.Domain.Interfaces
 {
     public interface IPostRepository
     {
+        Task<List<Post>> GetAll();
+
         Task<Post> GetById(Guid id);
 
         Task<Post> Create(Post post);
 
-        void Update(Post post);
+        Task<Post> Update(Post post);
 
         void Delete(Guid id);
     }

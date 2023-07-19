@@ -13,7 +13,7 @@ namespace Blog.Application.Services
             _postRepository = postRepository;
         }
 
-        public async Task CreatePost(string title, string content)
+        public async Task<Post> CreatePost(string title, string content)
         {
             var post = new Post(title, content)
             {
@@ -22,15 +22,17 @@ namespace Blog.Application.Services
             };
 
             _postRepository.Create(post);
+
+            return post;
         }
 
-        public async Task DeletePost(Guid postId)
+        public async void DeletePost(Guid postId)
         {
-            var post = _postRepository.GetById(postId);
+            var post = await _postRepository.GetById(postId);
 
             if (post != null)
             {
-                _postRepository.Delete(post.Id);
+                _postRepository.Delete(postId);
             }
             else
             {
@@ -38,9 +40,9 @@ namespace Blog.Application.Services
             }
         }
 
-        public async Task UpdatePost(Guid postId, string newTitle, string newContent)
+        public async Task<Post> UpdatePost(Guid postId, string newTitle, string newContent)
         {
-            var post = _postRepository.GetById(postId);
+            var post = await _postRepository.GetById(postId);
 
             if (post != null)
             {
@@ -49,6 +51,7 @@ namespace Blog.Application.Services
                 post.UpdatedDate = DateTime.Now;
 
                 _postRepository.Update(post);
+                return post;
             }
             else
             {
@@ -59,6 +62,16 @@ namespace Blog.Application.Services
         public async Task<Post> GetPost(Guid postId)
         {
             return await _postRepository.GetById(postId);
+        }
+
+        void IPostService.DeletePost(Guid postId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<Post>> GetAllPosts()
+        {
+            return await _postRepository.GetAll();
         }
     }
 }
