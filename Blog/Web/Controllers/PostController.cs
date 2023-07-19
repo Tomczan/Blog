@@ -38,5 +38,13 @@ namespace Blog.Web.Controllers
 
             return posts;
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdatePost(Guid id, string title, string content)
+        {
+            var post = await _postService.UpdatePost(id, title, content);
+
+            return Ok(post);
+        }
     }
 }

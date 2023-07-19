@@ -15,13 +15,9 @@ namespace Blog.Application.Services
 
         public async Task<Post> CreatePost(string title, string content)
         {
-            var post = new Post(title, content)
-            {
-                CreatedDate = DateTime.Now,
-                UpdatedDate = DateTime.Now
-            };
+            var post = Post.Create(title, content);
 
-            _postRepository.Create(post);
+            await _postRepository.Create(post);
 
             return post;
         }
@@ -44,19 +40,14 @@ namespace Blog.Application.Services
         {
             var post = await _postRepository.GetById(postId);
 
-            if (post != null)
+            if (post == null)
             {
-                post.Title = newTitle;
-                post.Content = newContent;
-                post.UpdatedDate = DateTime.Now;
+                throw new Exception($"Post with {postId} does not exist.");
+            }
 
-                _postRepository.Update(post);
-                return post;
-            }
-            else
-            {
-                throw new Exception("Post not found");
-            }
+            var updatedPost = await _postRepository.Update(post);
+
+            return updatedPost;
         }
 
         public async Task<Post> GetPost(Guid postId)

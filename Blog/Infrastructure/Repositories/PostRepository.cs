@@ -21,7 +21,8 @@ namespace Blog.Infrastructure.Repositories
 
         public async Task<Post> GetById(Guid id)
         {
-            return _dbContext.Posts.FirstOrDefault(p => p.Id == id);
+            var post = await _dbContext.Posts.FirstAsync(p => p.Id == id);
+            return post;
         }
 
         public async Task<Post> Create(Post post)
@@ -34,7 +35,7 @@ namespace Blog.Infrastructure.Repositories
         public async Task<Post> Update(Post post)
         {
             _dbContext.Posts.Update(post);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
             return post;
         }
 
