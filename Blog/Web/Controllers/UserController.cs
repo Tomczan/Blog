@@ -1,4 +1,5 @@
-﻿using Blog.Application.Interfaces;
+﻿using Blog.Application.Dto;
+using Blog.Application.Interfaces;
 using Blog.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,15 +33,35 @@ namespace Blog.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser(string name, string password)
+        public async Task<IActionResult> CreateUser([FromBody] LoginDTO loginData)
         {
-            return Created("", await _userService.CreateUser(name, password));
+            if (string.IsNullOrEmpty(loginData.Name) || string.IsNullOrEmpty(loginData.Password))
+            {
+                return BadRequest("login and password are required.");
+            }
+
+            var user = _userService.CreateUser(loginData.Name, loginData.Password);
+            return Created("User successfully created", user);
         }
 
-        [HttpGet("{name}, {password}")]
-        public async Task<IActionResult> Login(string name, string password)
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDTO loginData)
         {
-            return Ok(await _userService.Login(name, password));
+            if (string.IsNullOrEmpty(loginData.Name) || string.IsNullOrEmpty(loginData.Password))
+            {
+                return BadRequest("login and password are required.");
+            }
+
+            var result = await _userService.Login(loginData.Name, loginData.Password);
+
+            if (result)
+            {
+                return Ok("Logged successfully");
+            }
+            else
+            {
+                return Unauthorized("Inwalid login or password");
+            }
         }
     }
 }
