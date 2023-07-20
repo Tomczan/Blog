@@ -12,6 +12,7 @@ namespace Blog.Infrastructure.Database
         }
 
         public virtual DbSet<Post> Posts { get; set; }
+        public virtual DbSet<User> Users { get; set; }
         public string DbPath { get; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
