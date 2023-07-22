@@ -1,5 +1,5 @@
 ﻿using Blog.Application.Dto;
-using Blog.Application.Interfaces;
+using Blog.Application.Services;
 using Blog.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +9,9 @@ namespace Blog.Web.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly UserService _userService;
 
-        public UserController(IUserService userService)
+        public UserController(UserService userService)
         {
             _userService = userService;
         }
@@ -25,7 +25,7 @@ namespace Blog.Web.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUser(Guid id)
+        public async Task<IActionResult> GetUser(string id)
         {
             var user = await _userService.GetUser(id);
 
@@ -40,28 +40,28 @@ namespace Blog.Web.Controllers
                 return BadRequest("login and password are required.");
             }
 
-            var user = _userService.CreateUser(loginData.Name, loginData.Password);
+            var user = await _userService.CreateUser(loginData.Name, loginData.Password);
             return Created("User successfully created", user);
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDTO loginData)
-        {
-            if (string.IsNullOrEmpty(loginData.Name) || string.IsNullOrEmpty(loginData.Password))
-            {
-                return BadRequest("login and password are required.");
-            }
+        //[HttpPost("login")]
+        //public async Task<IActionResult> Login([FromBody] LoginDTO loginData)
+        //{
+        //    if (string.IsNullOrEmpty(loginData.Name) || string.IsNullOrEmpty(loginData.Password))
+        //    {
+        //        return BadRequest("login and password are required.");
+        //    }
 
-            var result = await _userService.Login(loginData.Name, loginData.Password);
+        //    var result = await _userService.Login(loginData.Name, loginData.Password);
 
-            if (result)
-            {
-                return Ok("Logged successfully");
-            }
-            else
-            {
-                return Unauthorized("Inwalid login or password");
-            }
-        }
+        //    if (result)
+        //    {
+        //        return Ok("Logged successfully");
+        //    }
+        //    else
+        //    {
+        //        return Unauthorized("Inwalid login or password");
+        //    }
+        //}
     }
 }

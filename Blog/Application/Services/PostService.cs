@@ -1,34 +1,34 @@
-﻿using Blog.Application.Interfaces;
-using Blog.Domain.Interfaces;
-using Blog.Domain.Models;
+﻿using Blog.Domain.Models;
+using Blog.Infrastructure.Factories;
+using MongoDB.Driver;
 
 namespace Blog.Application.Services
 {
-    public class PostService : IPostService
+    public class PostService
     {
-        private readonly IPostRepository _postRepository;
+        private readonly IMongoCollection<Post> _postRepository;
 
-        public PostService(IPostRepository postRepository)
+        public PostService(MongoDbFactory mongoDbFactory)
         {
-            _postRepository = postRepository;
+            _postRepository = mongoDbFactory.GetPostCollection();
         }
 
         public async Task<Post> CreatePost(string title, string content)
         {
             var post = Post.Create(title, content);
 
-            await _postRepository.Create(post);
+            await _postRepository.InsertOneAsync(post);
 
             return post;
         }
 
-        public async void DeletePost(Guid postId)
+        public async void DeletePost(string postId)
         {
-            var post = await _postRepository.GetById(postId);
+            var post = await _postRepository.Find(x => x.Id == postId).FirstOrDefaultAsync();
 
             if (post != null)
             {
-                _postRepository.Delete(postId);
+                await _postRepository.DeleteOneAsync(x => x.Id == postId);
             }
             else
             {
@@ -36,29 +36,32 @@ namespace Blog.Application.Services
             }
         }
 
-        public async Task<Post> UpdatePost(Guid postId, string newTitle, string newContent)
+        public async Task<Post> UpdatePost(string postId, string newTitle, string newContent)
         {
-            var post = await _postRepository.GetById(postId);
+            var post = await _postRepository.Find(x => x.Id == postId).FirstOrDefaultAsync() ?? throw new Exception($"Post with {postId} does not exist.");
 
-            if (post == null)
-            {
-                throw new Exception($"Post with {postId} does not exist.");
-            }
+            // temporary solution, fix cuz it will return table with new id on update!!
+            var newPost = Post.Create(newTitle, newContent);
 
-            post.Update(newTitle, newContent);
-            await _postRepository.Update(post);
+            //post.Update(newTitle, newContent);
+            await _postRepository.ReplaceOneAsync(x => x.Id == postId, newPost);
 
             return post;
         }
 
-        public async Task<Post> GetPost(Guid postId)
+        public async Task<Post> GetPost(string postId)
         {
-            return await _postRepository.GetById(postId);
+            return await _postRepository.Find(x => x.Id == postId).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<Post>> GetPostByTitle(string title)
+        {
+            return await _postRepository.Find(x => x.Title == title).ToListAsync();
         }
 
         public async Task<List<Post>> GetAllPosts()
         {
-            return await _postRepository.GetAll();
+            return await _postRepository.Find(_ => true).ToListAsync();
         }
     }
 }

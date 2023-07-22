@@ -1,22 +1,29 @@
-﻿using Microsoft.EntityFrameworkCore.Update.Internal;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Blog.Domain.Models
 {
     public class Post
     {
-        public Guid Id { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? Id { get; set; }
+
         public string Title { get; set; }
         public string Content { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
 
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? UserId { get; set; }
+
         public Post()
         { }
 
         protected Post(string title, string content)
         {
-            Id = Guid.NewGuid();
+            Id = ObjectId.GenerateNewId().ToString();
             Title = title;
             Content = content;
             CreatedDate = DateTime.Now;

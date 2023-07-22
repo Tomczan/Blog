@@ -6,12 +6,12 @@ namespace Blog.Domain.Interfaces
     {
         Task<List<Post>> GetAll();
 
-        Task<Post> GetById(Guid id);
+        Task<Post> GetById(string id);
 
         Task<Post> Create(Post post);
 
         Task<Post> Update(Post post);
 
-        void Delete(Guid id);
+        void Delete(string id);
     }
 }

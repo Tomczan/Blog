@@ -1,5 +1,4 @@
 ﻿using Blog.Domain.Models;
-using System.Threading.Tasks;
 
 namespace Blog.Application.Interfaces
 {
@@ -9,7 +8,7 @@ namespace Blog.Application.Interfaces
 
         Task<User> GetUser(Guid id);
 
-        Task<bool> Login(string name, string password);
+        //Task<bool> Login(string name, string password);
 
         Task<List<User>> GetAllUsers();
     }

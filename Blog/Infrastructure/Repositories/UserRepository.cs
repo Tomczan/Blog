@@ -1,11 +1,10 @@
-﻿using Blog.Domain.Interfaces;
-using Blog.Domain.Models;
+﻿using Blog.Domain.Models;
 using Blog.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Infrastructure.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository
     {
         private readonly MyDbContext _dbContext;
 
@@ -26,16 +25,16 @@ namespace Blog.Infrastructure.Repositories
             return await _dbContext.Users.ToListAsync();
         }
 
-        public async Task<User> GetById(Guid id)
+        public async Task<User> GetById(string id)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(p => p.Id == id);
             return user;
         }
 
-        public async Task<bool> Login(string name, string password)
-        {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(p => p.Name == name);
-            return user.VerifyPassword(password);
-        }
+        //public async Task<bool> Login(string name, string password)
+        //{
+        //    var user = await _dbContext.Users.FirstOrDefaultAsync(p => p.Name == name);
+        //    return user.VerifyPassword(password);
+        //}
     }
 }

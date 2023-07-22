@@ -1,12 +1,10 @@
-using Blog.Application.Interfaces;
 using Blog.Application.Services;
-using Blog.Domain.Interfaces;
 using Blog.Infrastructure.Database;
-using Blog.Infrastructure.Repositories;
+using Blog.Infrastructure.Factories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddEntityFrameworkSqlite().AddDbContext<MyDbContext>();
+builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("BlogStoreDatabase"));
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -14,10 +12,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IPostService, PostService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IPostRepository, PostRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+//SQLite
+//builder.Services.AddEntityFrameworkSqlite().AddDbContext<MyDbContext>();
+//builder.Services.AddScoped<IPostService, PostService>();
+//builder.Services.AddScoped<IUserService, UserService>();
+//builder.Services.AddScoped<IPostRepository, PostRepository>();
+//builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+// MongoDB
+builder.Services.AddSingleton<MongoDbFactory>();
+builder.Services.AddSingleton<PostService>();
+builder.Services.AddSingleton<UserService>();
 
 var app = builder.Build();
 

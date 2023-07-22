@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -6,18 +7,24 @@ namespace Blog.Domain.Models
 {
     public class User
     {
-        public Guid Id { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? Id { get; set; }
+
         public string Name { get; set; }
         public string Password { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
+
+        [BsonRepresentation(BsonType.ObjectId)]
+        public List<string>? PostsIds { get; set; }
 
         public User()
         { }
 
         protected User(string name, string password)
         {
-            Id = Guid.NewGuid();
+            Id = ObjectId.GenerateNewId().ToString();
             Name = name;
             Password = HashPassword(password);
             CreatedDate = DateTime.Now;

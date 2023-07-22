@@ -10,6 +10,6 @@ namespace Blog.Domain.Interfaces
 
         Task<User> Create(User user);
 
-        Task<bool> Login(string name, string password);
+        //Task<bool> Login(string name, string password);
     }
 }

@@ -19,7 +19,7 @@ namespace Blog.Infrastructure.Repositories
             return await _dbContext.Posts.ToListAsync();
         }
 
-        public async Task<Post> GetById(Guid id)
+        public async Task<Post> GetById(string id)
         {
             var post = await _dbContext.Posts.FirstOrDefaultAsync(p => p.Id == id);
             return post;
@@ -39,7 +39,7 @@ namespace Blog.Infrastructure.Repositories
             return post;
         }
 
-        public async void Delete(Guid id)
+        public async void Delete(string id)
         {
             var post = await GetById(id);
             if (post != null)
