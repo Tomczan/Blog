@@ -11,8 +11,10 @@ namespace Blog.Domain.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
 
-        public string Name { get; set; }
+        public string Login { get; set; }
         public string Password { get; set; }
+        public string Email { get; set; }
+        public string Nickname { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
 
@@ -22,18 +24,18 @@ namespace Blog.Domain.Models
         public User()
         { }
 
-        protected User(string name, string password)
+        protected User(string login, string password)
         {
             Id = ObjectId.GenerateNewId().ToString();
-            Name = name;
+            Login = login;
             Password = HashPassword(password);
             CreatedDate = DateTime.Now;
             UpdatedDate = DateTime.Now;
         }
 
-        public static User Create(string name, string password)
+        public static User Create(string login, string password)
         {
-            return new User(name, password);
+            return new User(login, password);
         }
 
         private string HashPassword(string password)

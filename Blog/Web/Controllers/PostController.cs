@@ -1,5 +1,5 @@
-﻿using Blog.Application.Services;
-using Blog.Domain.Models;
+﻿using Blog.Domain.Models;
+using Blog.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Web.Controllers
@@ -16,15 +16,15 @@ namespace Blog.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePost(string title, string content)
+        public async Task<IActionResult> CreatePost(string title, string content, string authorId)
         {
-            return Created("", await _postService.CreatePost(title, content));
+            return Created("", await _postService.CreatePost(title, content, authorId));
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetPost(string id)
+        public async Task<IActionResult> GetPostById(string id)
         {
-            var post = await _postService.GetPost(id);
+            var post = await _postService.GetPostById(id);
 
             return Ok(post);
         }
@@ -46,9 +46,9 @@ namespace Blog.Web.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdatePost(string id, string title, string content)
+        public async Task<IActionResult> UpdatePost(string id, string title, string content, string authorId)
         {
-            var post = await _postService.UpdatePost(id, title, content);
+            var post = await _postService.UpdatePost(id, title, content, authorId);
 
             return Ok(post);
         }

@@ -1,6 +1,6 @@
 ﻿using Blog.Domain.Models;
 
-namespace Blog.Domain.Interfaces
+namespace Blog.Application.Interfaces
 {
     public interface IPostRepository
     {

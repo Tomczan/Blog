@@ -2,9 +2,9 @@
 using Blog.Infrastructure.Factories;
 using MongoDB.Driver;
 
-namespace Blog.Application.Services
+namespace Blog.Infrastructure.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly IMongoCollection<User> _userRepository;
 

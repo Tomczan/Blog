@@ -1,6 +1,6 @@
-using Blog.Application.Services;
 using Blog.Infrastructure.Database;
 using Blog.Infrastructure.Factories;
+using Blog.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

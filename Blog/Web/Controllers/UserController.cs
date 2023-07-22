@@ -1,6 +1,6 @@
 ﻿using Blog.Application.Dto;
-using Blog.Application.Services;
 using Blog.Domain.Models;
+using Blog.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Web.Controllers
@@ -17,11 +17,11 @@ namespace Blog.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<List<User>> GetAllUsers()
+        public async Task<IActionResult> GetAllUsers()
         {
             var users = await _userService.GetAllUsers();
 
-            return users;
+            return Ok(users);
         }
 
         [HttpGet("{id}")]
@@ -35,12 +35,13 @@ namespace Blog.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] LoginDTO loginData)
         {
-            if (string.IsNullOrEmpty(loginData.Name) || string.IsNullOrEmpty(loginData.Password))
+            if (string.IsNullOrEmpty(loginData.Login) || string.IsNullOrEmpty(loginData.Password))
             {
                 return BadRequest("login and password are required.");
             }
 
-            var user = await _userService.CreateUser(loginData.Name, loginData.Password);
+            var user = await _userService.CreateUser(loginData.Login, loginData.Password);
+
             return Created("User successfully created", user);
         }
 

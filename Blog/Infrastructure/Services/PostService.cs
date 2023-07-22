@@ -2,9 +2,9 @@
 using Blog.Infrastructure.Factories;
 using MongoDB.Driver;
 
-namespace Blog.Application.Services
+namespace Blog.Infrastructure.Services
 {
-    public class PostService
+    public class PostService : IPostService
     {
         private readonly IMongoCollection<Post> _postRepository;
 
@@ -13,9 +13,9 @@ namespace Blog.Application.Services
             _postRepository = mongoDbFactory.GetPostCollection();
         }
 
-        public async Task<Post> CreatePost(string title, string content)
+        public async Task<Post> CreatePost(string title, string content, string authorId)
         {
-            var post = Post.Create(title, content);
+            var post = Post.Create(title, content, authorId);
 
             await _postRepository.InsertOneAsync(post);
 
@@ -36,12 +36,12 @@ namespace Blog.Application.Services
             }
         }
 
-        public async Task<Post> UpdatePost(string postId, string newTitle, string newContent)
+        public async Task<Post> UpdatePost(string postId, string newTitle, string newContent, string authorId)
         {
             var post = await _postRepository.Find(x => x.Id == postId).FirstOrDefaultAsync() ?? throw new Exception($"Post with {postId} does not exist.");
 
             // temporary solution, fix cuz it will return table with new id on update!!
-            var newPost = Post.Create(newTitle, newContent);
+            var newPost = Post.Create(newTitle, newContent, authorId);
 
             //post.Update(newTitle, newContent);
             await _postRepository.ReplaceOneAsync(x => x.Id == postId, newPost);
@@ -49,7 +49,7 @@ namespace Blog.Application.Services
             return post;
         }
 
-        public async Task<Post> GetPost(string postId)
+        public async Task<Post> GetPostById(string postId)
         {
             return await _postRepository.Find(x => x.Id == postId).FirstOrDefaultAsync();
         }

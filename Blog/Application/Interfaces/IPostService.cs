@@ -1,16 +1,18 @@
 ﻿using Blog.Domain.Models;
 
-namespace Blog.Application.Interfaces
+namespace Blog.Infrastructure.Services
 {
     public interface IPostService
     {
-        Task<Post> CreatePost(string title, string content);
+        Task<Post> CreatePost(string title, string content, string authorId);
 
-        Task<Post> UpdatePost(Guid postId, string newTitle, string newContent);
+        void DeletePost(string postId);
 
-        void DeletePost(Guid postId);
+        Task<Post> UpdatePost(string postId, string newTitle, string newContent, string authorId);
 
-        Task<Post> GetPost(Guid postId);
+        Task<Post> GetPostById(string postId);
+
+        Task<List<Post>> GetPostByTitle(string title);
 
         Task<List<Post>> GetAllPosts();
     }
