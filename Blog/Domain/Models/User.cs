@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -11,10 +12,14 @@ namespace Blog.Domain.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
 
-        public string Login { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
-        public string Nickname { get; set; }
+        [Required]
+        public string Login { get; set; } = null!;
+
+        [Required]
+        public string Password { get; set; } = null!;
+
+        public string? Email { get; set; }
+        public string? Nickname { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
 

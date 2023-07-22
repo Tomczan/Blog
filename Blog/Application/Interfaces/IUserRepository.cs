@@ -6,7 +6,7 @@ namespace Blog.Application.Interfaces
     {
         Task<List<User>> GetAll();
 
-        Task<User> GetById(Guid id);
+        Task<User?> GetById(string id);
 
         Task<User> Create(User user);
 

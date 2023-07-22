@@ -9,9 +9,11 @@ namespace Blog.Domain.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
+
         [Required]
-        public string Title { get; set; }
-        public string Content { get; set; }
+        public string Title { get; set; } = null!;
+
+        public string? Content { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }

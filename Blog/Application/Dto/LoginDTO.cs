@@ -1,8 +1,13 @@
-﻿namespace Blog.Application.Dto
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Blog.Application.Dto
 {
     public class LoginDTO
     {
-        public string Login { get; set; }
-        public string Password { get; set; }
+        [Required]
+        public string Login { get; set; } = null!;
+
+        [Required]
+        public string Password { get; set; } = null!;
     }
 }

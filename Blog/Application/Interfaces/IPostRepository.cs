@@ -6,7 +6,7 @@ namespace Blog.Application.Interfaces
     {
         Task<List<Post>> GetAll();
 
-        Task<Post> GetById(string id);
+        Task<Post?> GetById(string id);
 
         Task<Post> Create(Post post);
 
