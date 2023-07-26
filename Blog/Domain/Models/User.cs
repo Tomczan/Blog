@@ -13,10 +13,10 @@ namespace Blog.Domain.Models
         public string? Id { get; set; }
 
         [Required]
-        public string Login { get; set; } = null!;
+        public string Login { get; set; } = string.Empty;
 
         [Required]
-        public string Password { get; set; } = null!;
+        public string Password { get; set; } = string.Empty;
 
         public string? Email { get; set; }
         public string? Nickname { get; set; }
@@ -43,19 +43,17 @@ namespace Blog.Domain.Models
             return new User(login, password);
         }
 
-        private string HashPassword(string password)
+        public static string HashPassword(string password)
         {
-            using (SHA256 sha256Hash = SHA256.Create())
-            {
-                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
+            using SHA256 sha256Hash = SHA256.Create();
+            byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
 
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    builder.Append(bytes[i].ToString("x2"));
-                }
-                return builder.ToString();
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                builder.Append(bytes[i].ToString("x2"));
             }
+            return builder.ToString();
         }
 
         public bool VerifyPassword(string password)

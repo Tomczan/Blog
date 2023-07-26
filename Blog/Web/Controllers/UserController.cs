@@ -45,24 +45,24 @@ namespace Blog.Web.Controllers
             return Created("User successfully created", user);
         }
 
-        //[HttpPost("login")]
-        //public async Task<IActionResult> Login([FromBody] LoginDTO loginData)
-        //{
-        //    if (string.IsNullOrEmpty(loginData.Name) || string.IsNullOrEmpty(loginData.Password))
-        //    {
-        //        return BadRequest("login and password are required.");
-        //    }
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDTO loginData)
+        {
+            if (string.IsNullOrEmpty(loginData.Login) || string.IsNullOrEmpty(loginData.Password))
+            {
+                return BadRequest("login and password are required.");
+            }
 
-        //    var result = await _userService.Login(loginData.Name, loginData.Password);
+            var result = await _userService.Login(loginData.Login, loginData.Password);
 
-        //    if (result)
-        //    {
-        //        return Ok("Logged successfully");
-        //    }
-        //    else
-        //    {
-        //        return Unauthorized("Inwalid login or password");
-        //    }
-        //}
+            if (result)
+            {
+                return Ok("Logged successfully");
+            }
+            else
+            {
+                return Unauthorized("Inwalid login or password");
+            }
+        }
     }
 }
