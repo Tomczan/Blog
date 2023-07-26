@@ -1,6 +1,8 @@
 using Blog.Infrastructure.Database;
 using Blog.Infrastructure.Factories;
 using Blog.Infrastructure.Services;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,9 +22,10 @@ builder.Services.AddSwaggerGen();
 //builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // MongoDB
-builder.Services.AddSingleton<MongoDbFactory>();
-builder.Services.AddSingleton<PostService>();
-builder.Services.AddSingleton<UserService>();
+builder.Services.AddScoped<MongoDbFactory>();
+builder.Services.AddScoped<PostService>();
+builder.Services.AddScoped<UserService>();
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
 var app = builder.Build();
 
