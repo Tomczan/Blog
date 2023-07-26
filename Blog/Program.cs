@@ -1,7 +1,6 @@
 using Blog.Infrastructure.Database;
 using Blog.Infrastructure.Factories;
 using Blog.Infrastructure.Services;
-using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,14 +13,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//SQLite
-//builder.Services.AddEntityFrameworkSqlite().AddDbContext<MyDbContext>();
-//builder.Services.AddScoped<IPostService, PostService>();
-//builder.Services.AddScoped<IUserService, UserService>();
-//builder.Services.AddScoped<IPostRepository, PostRepository>();
-//builder.Services.AddScoped<IUserRepository, UserRepository>();
-
-// MongoDB
 builder.Services.AddScoped<MongoDbFactory>();
 builder.Services.AddScoped<PostService>();
 builder.Services.AddScoped<UserService>();
