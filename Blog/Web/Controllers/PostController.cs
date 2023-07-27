@@ -30,9 +30,9 @@ namespace Blog.Web.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPostById(string id)
         {
-            var post = await _postService.GetPostById(id);
-
-            return Ok(post);
+            var query = new GetPostByIdQuery(id);
+            var result = await _mediator.Send(query);
+            return result != null ? Ok(result) : NotFound();
         }
 
         [HttpGet("search/{title}")]
