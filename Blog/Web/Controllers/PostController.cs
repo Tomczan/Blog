@@ -1,4 +1,5 @@
 ﻿using Blog.Application.Dtos;
+using Blog.Application.Posts.Commands;
 using Blog.Application.Posts.Queries;
 using Blog.Infrastructure.Services;
 using MediatR;
@@ -36,9 +37,12 @@ namespace Blog.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePost(string title, string content, string authorId)
+        public async Task<IActionResult> CreatePost(CreatePostDTO postData)
         {
-            return Created("", await _postService.CreatePost(title, content, authorId));
+            var command = new CreatePostCommand(postData);
+            var result = await _mediator.Send(command);
+
+            return Created("Post created successfully", result);
         }
 
         [HttpPut]

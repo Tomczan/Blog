@@ -17,6 +17,7 @@ namespace Blog.Infrastructure.Services
         public async Task<List<Post>> GetPosts(PostQueryParamsDTO query)
         {
             // https://stackoverflow.com/questions/32227284/mongo-c-sharp-driver-building-filter-dynamically-with-nesting
+            // https://www.mongodb.com/docs/drivers/csharp/current/fundamentals/builders/
             var builder = Builders<Post>.Filter;
 
             var filters = builder.Empty;
