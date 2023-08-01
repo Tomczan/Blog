@@ -1,12 +1,12 @@
-﻿using Blog.Application.Posts.Queries;
-using Blog.Domain.Models;
+﻿using Blog.Application.Dtos;
+using Blog.Application.Posts.Queries;
 using Blog.Infrastructure.Services;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Web.Controllers
 {
-    [Route("api/posts")]
+    [Route("api/[controller]")]
     [ApiController]
     public class PostController : ControllerBase
     {
@@ -20,9 +20,9 @@ namespace Blog.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllPosts()
+        public async Task<IActionResult> GetPosts([FromQuery] PostQueryParamsDTO postParams)
         {
-            var query = new GetAllPostsQuery();
+            var query = new GetPostsQuery(postParams);
             var result = await _mediator.Send(query);
             return Ok(result);
         }
@@ -33,14 +33,6 @@ namespace Blog.Web.Controllers
             var query = new GetPostByIdQuery(id);
             var result = await _mediator.Send(query);
             return result != null ? Ok(result) : NotFound();
-        }
-
-        [HttpGet("search/{title}")]
-        public async Task<List<Post>> GetPostsByTitle(string title)
-        {
-            var posts = await _postService.GetPostByTitle(title);
-
-            return posts;
         }
 
         [HttpPost]
@@ -57,12 +49,19 @@ namespace Blog.Web.Controllers
             return Ok(post);
         }
 
-        [HttpDelete]
-        public IActionResult DeletePost(string id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePost(string id)
         {
-            _postService.DeletePost(id);
+            try
+            {
+                await _postService.DeletePost(id);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error occured {ex}");
+            }
 
-            return Ok(id);
+            return Ok("Post deleted successfully");
         }
     }
 }
