@@ -41,7 +41,6 @@ namespace Blog.Web.Controllers
         {
             var command = new CreatePostCommand(postData);
             var result = await _mediator.Send(command);
-
             return Created("Post created successfully", result);
         }
 

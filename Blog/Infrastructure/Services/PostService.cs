@@ -1,6 +1,7 @@
 ﻿using Blog.Application.Dtos;
 using Blog.Domain.Models;
 using Blog.Infrastructure.Factories;
+using Blog.Infrastructure.Filters;
 using MongoDB.Driver;
 
 namespace Blog.Infrastructure.Services
@@ -8,31 +9,19 @@ namespace Blog.Infrastructure.Services
     public class PostService : IPostService
     {
         private readonly IMongoCollection<Post> _postRepository;
+        private readonly PostFilters _postFilters;
 
-        public PostService(MongoDbFactory mongoDbFactory)
+        public PostService(MongoDbFactory mongoDbFactory, PostFilters postFilters)
         {
             _postRepository = mongoDbFactory.GetPostCollection();
+            _postFilters = postFilters;
         }
 
         public async Task<List<Post>> GetPosts(PostQueryParamsDTO query)
         {
-            // https://stackoverflow.com/questions/32227284/mongo-c-sharp-driver-building-filter-dynamically-with-nesting
-            // https://www.mongodb.com/docs/drivers/csharp/current/fundamentals/builders/
-            var builder = Builders<Post>.Filter;
+            var filters = _postFilters.GetPostsFilter(query);
 
-            var filters = builder.Empty;
-
-            if (query.Title != null)
-            {
-                filters &= builder.Eq(x => x.Title, query.Title);
-            }
-
-            if (query.CreatedDate != null)
-            {
-                filters &= builder.Gt(x => x.CreatedDate, query.CreatedDate);
-            }
-
-            var posts = await _postRepository.Find(filters).ToListAsync();
+            var posts = await _postRepository.Find(filters).Skip(0).Limit(3).ToListAsync();
 
             return posts;
         }
