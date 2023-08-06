@@ -3,7 +3,7 @@ using Blog.Domain.Models;
 using Blog.Infrastructure.Services;
 using MediatR;
 
-namespace Blog.Application.Posts.Handlers
+namespace Blog.Application.Posts.QueriesHandlers
 {
     public class GetPostsHandler : IRequestHandler<GetPostsQuery, List<Post>>
     {

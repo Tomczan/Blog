@@ -21,7 +21,7 @@ namespace Blog.Infrastructure.Services
         {
             var filters = _postFilters.GetPostsFilter(query);
 
-            var posts = await _postRepository.Find(filters).Skip(0).Limit(3).ToListAsync();
+            var posts = await _postRepository.Find(filters).ToListAsync();
 
             return posts;
         }
