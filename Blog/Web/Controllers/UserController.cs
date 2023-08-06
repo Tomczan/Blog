@@ -1,5 +1,5 @@
 ﻿using Blog.Application.Dto;
-using Blog.Domain.Models;
+using Blog.Application.Interfaces;
 using Blog.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,10 +10,12 @@ namespace Blog.Web.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
+        private readonly IAuthService _authService;
 
-        public UserController(UserService userService)
+        public UserController(UserService userService, IAuthService authService)
         {
             _userService = userService;
+            _authService = authService;
         }
 
         [HttpGet]
@@ -48,21 +50,9 @@ namespace Blog.Web.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginData)
         {
-            if (string.IsNullOrEmpty(loginData.Login) || string.IsNullOrEmpty(loginData.Password))
-            {
-                return BadRequest("login and password are required.");
-            }
+            var user = await _userService.Login(loginData.Login, loginData.Password);
 
-            var result = await _userService.Login(loginData.Login, loginData.Password);
-
-            if (result)
-            {
-                return Ok("Logged successfully");
-            }
-            else
-            {
-                return Unauthorized("Inwalid login or password");
-            }
+            return user != null ? Ok(_authService.CreateJwtToken(user)) : NotFound("User not found.");
         }
     }
 }

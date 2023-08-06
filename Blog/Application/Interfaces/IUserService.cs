@@ -10,6 +10,6 @@ namespace Blog.Infrastructure.Services
 
         Task<List<User>> GetAllUsers();
 
-        Task<bool> Login(string login, string password);
+        Task<User> Login(string login, string password);
     }
 }

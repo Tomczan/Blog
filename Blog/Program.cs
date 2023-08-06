@@ -1,4 +1,5 @@
 using Autofac.Core;
+using Blog.Application.Interfaces;
 using Blog.Infrastructure.Database;
 using Blog.Infrastructure.Factories;
 using Blog.Infrastructure.Filters;
@@ -18,6 +19,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<MongoDbFactory>();
 builder.Services.AddScoped<PostService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<PostFilters>();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 

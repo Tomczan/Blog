@@ -32,12 +32,12 @@ namespace Blog.Infrastructure.Services
             return await _userRepository.Find(_ => true).ToListAsync();
         }
 
-        public async Task<bool> Login(string login, string password)
+        public async Task<User> Login(string login, string password)
         {
             var hashedPassword = User.HashPassword(password);
-            var result = await _userRepository.FindAsync(x => x.Login == login || x.Password == hashedPassword);
+            var result = await _userRepository.Find(x => x.Login == login && x.Password == hashedPassword).FirstOrDefaultAsync();
 
-            return await result.AnyAsync();
+            return result;
         }
     }
 }
