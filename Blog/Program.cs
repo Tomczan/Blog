@@ -5,6 +5,9 @@ using Blog.Infrastructure.Filters;
 using Blog.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
+using System.ComponentModel;
 using System.Reflection;
 using System.Text;
 
@@ -16,15 +19,19 @@ builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("Bl
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<MongoDbFactory>();
-builder.Services.AddScoped<PostService>();
-builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<PostFilters>();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("JWT", new OpenApiSecurityScheme
+    {
+        Description = "Bearer {token}",
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
@@ -36,6 +43,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidateAudience = false,
     };
 });
+
+builder.Services.AddScoped<MongoDbFactory>();
+builder.Services.AddScoped<PostService>();
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<PostFilters>();
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
 var app = builder.Build();
 
