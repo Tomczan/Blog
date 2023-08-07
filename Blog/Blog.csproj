@@ -8,7 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.1.1" />
-    <PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="11.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.20" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.9">
       <PrivateAssets>all</PrivateAssets>
@@ -16,7 +17,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.32.1" />
     <PackageReference Include="MongoDB.Driver" Version="2.20.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.32.1" />
   </ItemGroup>

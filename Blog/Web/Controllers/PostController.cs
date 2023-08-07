@@ -3,6 +3,7 @@ using Blog.Application.Posts.Commands;
 using Blog.Application.Posts.Queries;
 using Blog.Infrastructure.Services;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Web.Controllers
@@ -29,6 +30,7 @@ namespace Blog.Web.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetPostById(string id)
         {
             var query = new GetPostByIdQuery(id);
