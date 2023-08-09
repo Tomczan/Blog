@@ -1,5 +1,4 @@
 ﻿using Blog.Application.Posts.Commands;
-using Blog.Application.Posts.Queries;
 using Blog.Domain.Models;
 using Blog.Infrastructure.Services;
 using MediatR;

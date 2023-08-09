@@ -40,7 +40,7 @@ namespace Blog.Infrastructure.Services
             return post;
         }
 
-        public async Task DeletePost(string postId)
+        public async Task<bool> DeletePost(string postId)
         {
             var post = await _postRepository.Find(x => x.Id == postId).FirstOrDefaultAsync();
 
@@ -52,6 +52,8 @@ namespace Blog.Infrastructure.Services
                 {
                     throw new Exception("Failed to delete the post");
                 }
+
+                return result.IsAcknowledged;
             }
             else
             {

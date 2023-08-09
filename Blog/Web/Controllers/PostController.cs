@@ -57,16 +57,9 @@ namespace Blog.Web.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(string id)
         {
-            try
-            {
-                await _postService.DeletePost(id);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Error occured {ex}");
-            }
-
-            return Ok("Post deleted successfully");
+            var command = new DeletePostCommand(id);
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
     }
 }
