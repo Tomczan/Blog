@@ -1,4 +1,7 @@
 ﻿using Grpc.Core;
+using DeepL;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 
 namespace TranslatorApp.Services
 {
@@ -11,20 +14,33 @@ namespace TranslatorApp.Services
             _logger = logger;
         }
 
-        public override Task<TextReply> TranslatePost(TextRequest request, ServerCallContext context)
+        public override async Task<TextReply> TranslatePost(TextRequest request, ServerCallContext context)
         {
             _logger.LogInformation($"Received request for translation. Post Title: {request.PostTitle}, Post Body: {request.PostBody}");
 
+            var authKey = "YOUR DEEPL AUTH KEY";
+
+            var translator = new DeepL.Translator(authKey);
+
+            var translation = await translator.TranslateTextAsync(
+                $"{request.PostTitle} * {request.PostBody}",
+                LanguageCode.Polish,
+                LanguageCode.EnglishAmerican);
+
+            var translatedTextArr = translation.ToString().Split(new[] { "*" }, StringSplitOptions.RemoveEmptyEntries);
+
+            Console.WriteLine(translation);
+
             var translatedReply = new TextReply
             {
-                TranslatedPostTitle = "Translated title will be here",
-                TranslatedPostBody = "Translated body will be here"
+                TranslatedPostTitle = translatedTextArr[0].Trim(),
+                TranslatedPostBody = translatedTextArr[1].Trim(),
             };
 
             // Logowanie wiadomości wychodzącej
             _logger.LogInformation($"Sending translated response. Translated Title: {translatedReply.TranslatedPostTitle}, Translated Body: {translatedReply.TranslatedPostBody}");
 
-            return Task.FromResult(translatedReply);
+            return translatedReply;
         }
     }
 }
