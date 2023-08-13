@@ -1,6 +1,5 @@
 ﻿using Grpc.Core;
 using DeepL;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 
 namespace TranslatorApp.Services
@@ -18,7 +17,9 @@ namespace TranslatorApp.Services
         {
             _logger.LogInformation($"Received request for translation. Post Title: {request.PostTitle}, Post Body: {request.PostBody}");
 
-            var authKey = "YOUR DEEPL AUTH KEY";
+            ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
+            IConfiguration configuration = configurationBuilder.AddUserSecrets<Program>().Build();
+            string authKey = configuration.GetSection("deepl")["authKey"];
 
             var translator = new DeepL.Translator(authKey);
 
