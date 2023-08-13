@@ -61,5 +61,13 @@ namespace Blog.Web.Controllers
             var result = await _mediator.Send(command);
             return Ok(result);
         }
+
+        [HttpGet("translate/{id}")]
+        public async Task<IActionResult> TranslatePost(string id)
+        {
+            var command = new GetTranslatedPostQuery(id);
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
     }
 }

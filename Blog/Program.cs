@@ -3,6 +3,7 @@ using Blog.Infrastructure.Database;
 using Blog.Infrastructure.Factories;
 using Blog.Infrastructure.Filters;
 using Blog.Infrastructure.Services;
+using Grpc.Net.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -10,6 +11,7 @@ using Swashbuckle.AspNetCore.Filters;
 using System.ComponentModel;
 using System.Reflection;
 using System.Text;
+using TranslatorApp;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +51,12 @@ builder.Services.AddScoped<PostService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<PostFilters>();
+builder.Services.AddScoped(provider =>
+{
+    var channel = GrpcChannel.ForAddress("https://localhost:7027");
+    return new Translator.TranslatorClient(channel);
+});
+builder.Services.AddScoped<TranslatorService>();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 

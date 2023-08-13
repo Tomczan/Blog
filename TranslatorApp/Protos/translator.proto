@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option csharp_namespace = "TranslatorApp";
+
+package translator;
+
+service Translator { 
+	rpc TranslatePost (TextRequest) returns (TextReply);
+}
+
+message TextRequest {
+	string postTitle = 1;
+	string postBody = 2;
+}
+
+message TextReply {
+	string translatedPostTitle = 1;
+	string translatedPostBody = 2;
+}
