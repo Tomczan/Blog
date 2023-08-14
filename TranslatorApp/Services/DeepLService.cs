@@ -25,10 +25,7 @@ namespace TranslatorApp.Services
                 LanguageCode.EnglishAmerican);
 
             var translatedTextArr = translation.ToString().Split(new[] { delimiter }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var t in translatedTextArr)
-            {
-                Console.WriteLine(t);
-            }
+
             var translatedReply = new TextReply
             {
                 TranslatedPostTitle = translatedTextArr[0].Trim(),
