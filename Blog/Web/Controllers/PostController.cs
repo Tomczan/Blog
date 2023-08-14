@@ -3,8 +3,12 @@ using Blog.Application.Posts.Commands;
 using Blog.Application.Posts.Queries;
 using Blog.Infrastructure.Services;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Blog.Web.Controllers
 {
@@ -25,6 +29,16 @@ namespace Blog.Web.Controllers
         public async Task<IActionResult> GetPosts([FromQuery] PostQueryParamsDTO postParams)
         {
             var query = new GetPostsQuery(postParams);
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpGet("my-posts/")]
+        [Authorize]
+        public async Task<IActionResult> GetPostsByAuthor([FromQuery] PostQueryParamsDTO postParams)
+        {
+            var userLogin = User.FindFirst(ClaimTypes.Name).Value;
+            var query = new GetPostsByAuthorQuery(postParams, userLogin);
             var result = await _mediator.Send(query);
             return Ok(result);
         }

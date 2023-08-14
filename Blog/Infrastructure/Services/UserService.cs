@@ -27,6 +27,11 @@ namespace Blog.Infrastructure.Services
             return await _userRepository.Find(x => x.Id == id).FirstOrDefaultAsync();
         }
 
+        public async Task<User> GetUserByLogin(string login)
+        {
+            return await _userRepository.Find(x => x.Login == login).FirstOrDefaultAsync();
+        }
+
         public async Task<List<User>> GetAllUsers()
         {
             return await _userRepository.Find(_ => true).ToListAsync();

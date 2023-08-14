@@ -26,6 +26,15 @@ namespace Blog.Infrastructure.Services
             return posts;
         }
 
+        public async Task<List<Post>> GetPostsByAuthor(PostQueryParamsDTO query, User user)
+        {
+            var filters = _postFilters.GetPostsFilter(query, user);
+
+            var posts = await _postRepository.Find(filters).ToListAsync();
+
+            return posts;
+        }
+
         public async Task<Post> GetPostById(string postId)
         {
             return await _postRepository.Find(x => x.Id == postId).FirstOrDefaultAsync();
