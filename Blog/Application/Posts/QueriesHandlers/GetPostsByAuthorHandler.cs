@@ -2,6 +2,7 @@
 using Blog.Domain.Models;
 using Blog.Infrastructure.Services;
 using MediatR;
+using System.Security.Claims;
 
 namespace Blog.Application.Posts.QueriesHandlers
 {
@@ -9,16 +10,19 @@ namespace Blog.Application.Posts.QueriesHandlers
     {
         private readonly PostService _postService;
         private readonly UserService _userService;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public GetPostsByAuthorHandler(PostService postService, UserService userService)
+        public GetPostsByAuthorHandler(PostService postService, UserService userService, IHttpContextAccessor contextAccessor)
         {
             _postService = postService;
             _userService = userService;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task<List<Post>> Handle(GetPostsByAuthorQuery request, CancellationToken cancellationToken)
         {
-            var user = await _userService.GetUserByLogin(request.AuthorLogin);
+            var userLogin = _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            var user = await _userService.GetUserByLogin(userLogin);
             return await _postService.GetPostsByAuthor(request.PostQueryParams, user);
         }
     }

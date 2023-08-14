@@ -37,8 +37,7 @@ namespace Blog.Web.Controllers
         [Authorize]
         public async Task<IActionResult> GetPostsByAuthor([FromQuery] PostQueryParamsDTO postParams)
         {
-            var userLogin = User.FindFirst(ClaimTypes.Name).Value;
-            var query = new GetPostsByAuthorQuery(postParams, userLogin);
+            var query = new GetPostsByAuthorQuery(postParams);
             var result = await _mediator.Send(query);
             return Ok(result);
         }
@@ -55,8 +54,7 @@ namespace Blog.Web.Controllers
         [Authorize]
         public async Task<IActionResult> CreatePost(CreatePostDTO postData)
         {
-            var userLogin = User.FindFirst(ClaimTypes.Name).Value;
-            var command = new CreatePostCommand(postData, userLogin);
+            var command = new CreatePostCommand(postData);
             var result = await _mediator.Send(command);
             return Created("Post created successfully", result);
         }

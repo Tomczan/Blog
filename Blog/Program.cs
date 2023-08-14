@@ -52,6 +52,7 @@ builder.Services.AddScoped<PostService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<PostFilters>();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped(provider =>
 {
     var channel = GrpcChannel.ForAddress("https://localhost:7027");

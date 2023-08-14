@@ -8,12 +8,9 @@ namespace Blog.Application.Posts.Queries
     {
         public PostQueryParamsDTO PostQueryParams { get; }
 
-        public string AuthorLogin { get; set; }
-
-        public GetPostsByAuthorQuery(PostQueryParamsDTO postQueryParams, string authorLogin)
+        public GetPostsByAuthorQuery(PostQueryParamsDTO postQueryParams)
         {
             PostQueryParams = postQueryParams;
-            AuthorLogin = authorLogin;
         }
     }
 }
