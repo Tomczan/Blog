@@ -13,10 +13,10 @@ namespace Blog.Domain.Models
         public string? Id { get; set; }
 
         [Required]
-        public string Login { get; set; } = string.Empty;
+        public string Login { get; set; }
 
         [Required]
-        public string Password { get; set; } = string.Empty;
+        public string Password { get; set; }
 
         public string? Email { get; set; }
         public string? Nickname { get; set; }

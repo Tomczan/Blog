@@ -24,7 +24,12 @@ namespace Blog.Infrastructure.Factories
 
         public IMongoCollection<User> GetUserCollection()
         {
-            return _mongoDatabase.GetCollection<User>(_mongoDbSettings.UsersCollectionName);
+            var userCollection = _mongoDatabase.GetCollection<User>(_mongoDbSettings.UsersCollectionName);
+
+            var uniqueOptions = new CreateIndexOptions { Unique = true };
+            userCollection.Indexes.CreateOne("{ Login : 1 }", uniqueOptions);
+
+            return userCollection;
         }
     }
 }

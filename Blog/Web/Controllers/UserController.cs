@@ -41,10 +41,15 @@ namespace Blog.Web.Controllers
             {
                 return BadRequest("login and password are required.");
             }
-
-            var user = await _userService.CreateUser(loginData.Login, loginData.Password);
-
-            return Created("User successfully created", user);
+            try
+            {
+                var user = await _userService.CreateUser(loginData.Login, loginData.Password);
+                return Created("User successfully created", user);
+            }
+            catch (Exception ex)
+            {
+                return Conflict("login is already taken");
+            }
         }
 
         [HttpPost("login")]
