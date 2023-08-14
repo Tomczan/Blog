@@ -1,47 +1,30 @@
 ﻿using Grpc.Core;
 using DeepL;
 using Microsoft.Extensions.Configuration;
+using TranslatorApp.Interfaces;
 
 namespace TranslatorApp.Services
 {
     public class TranslatorService : Translator.TranslatorBase
     {
         private readonly ILogger<TranslatorService> _logger;
+        private readonly DeepLService _deepLService;
 
-        public TranslatorService(ILogger<TranslatorService> logger)
+        public TranslatorService(ILogger<TranslatorService> logger, DeepLService deepLService)
         {
             _logger = logger;
+            _deepLService = deepLService;
         }
 
         public override async Task<TextReply> TranslatePost(TextRequest request, ServerCallContext context)
         {
             _logger.LogInformation($"Received request for translation. Post Title: {request.PostTitle}, Post Body: {request.PostBody}");
 
-            ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
-            IConfiguration configuration = configurationBuilder.AddUserSecrets<Program>().Build();
-            string authKey = configuration.GetSection("deepl")["authKey"];
+            var translatedPost = await _deepLService.TranslatePost(request.PostTitle, request.PostBody);
 
-            var translator = new DeepL.Translator(authKey);
+            _logger.LogInformation($"Sending translated response. Translated Title: {translatedPost.TranslatedPostTitle}, Translated Body: {translatedPost.TranslatedPostBody}");
 
-            var translation = await translator.TranslateTextAsync(
-                $"{request.PostTitle} * {request.PostBody}",
-                LanguageCode.Polish,
-                LanguageCode.EnglishAmerican);
-
-            var translatedTextArr = translation.ToString().Split(new[] { "*" }, StringSplitOptions.RemoveEmptyEntries);
-
-            Console.WriteLine(translation);
-
-            var translatedReply = new TextReply
-            {
-                TranslatedPostTitle = translatedTextArr[0].Trim(),
-                TranslatedPostBody = translatedTextArr[1].Trim(),
-            };
-
-            // Logowanie wiadomości wychodzącej
-            _logger.LogInformation($"Sending translated response. Translated Title: {translatedReply.TranslatedPostTitle}, Translated Body: {translatedReply.TranslatedPostBody}");
-
-            return translatedReply;
+            return translatedPost;
         }
     }
 }
