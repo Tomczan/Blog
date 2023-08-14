@@ -1,7 +1,4 @@
 ﻿using Grpc.Core;
-using DeepL;
-using Microsoft.Extensions.Configuration;
-using TranslatorApp.Interfaces;
 
 namespace TranslatorApp.Services
 {

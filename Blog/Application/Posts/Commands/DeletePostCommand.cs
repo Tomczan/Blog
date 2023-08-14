@@ -1,5 +1,4 @@
-﻿using Blog.Domain.Models;
-using MediatR;
+﻿using MediatR;
 
 namespace Blog.Application.Posts.Commands
 {

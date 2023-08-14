@@ -1,5 +1,4 @@
 ﻿using DeepL;
-using Microsoft.AspNetCore.Identity;
 using TranslatorApp.Interfaces;
 
 namespace TranslatorApp.Services
@@ -11,21 +10,25 @@ namespace TranslatorApp.Services
 
         public DeepLService()
         {
-            ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
+            ConfigurationBuilder configurationBuilder = new();
             IConfiguration configuration = configurationBuilder.AddUserSecrets<Program>().Build();
             _authKey = configuration.GetSection("deepl")["authKey"];
             _translator = new DeepL.Translator(_authKey);
         }
 
-        public async Task<TextReply> TranslatePost(string title, string content, string delimiter = "*")
+        public async Task<TextReply> TranslatePost(string title, string content)
         {
+            var delimiter = Guid.NewGuid().ToString();
             var translation = await _translator.TranslateTextAsync(
                 $"{title} {delimiter} {content}",
                 LanguageCode.Polish,
                 LanguageCode.EnglishAmerican);
 
             var translatedTextArr = translation.ToString().Split(new[] { delimiter }, StringSplitOptions.RemoveEmptyEntries);
-
+            foreach (var t in translatedTextArr)
+            {
+                Console.WriteLine(t);
+            }
             var translatedReply = new TextReply
             {
                 TranslatedPostTitle = translatedTextArr[0].Trim(),

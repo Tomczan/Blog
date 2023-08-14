@@ -3,12 +3,8 @@ using Blog.Application.Posts.Commands;
 using Blog.Application.Posts.Queries;
 using Blog.Infrastructure.Services;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace Blog.Web.Controllers
 {

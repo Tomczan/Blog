@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Blog.Application.Dtos
+﻿namespace Blog.Application.Dtos
 {
     public class PostQueryParamsDTO
     {

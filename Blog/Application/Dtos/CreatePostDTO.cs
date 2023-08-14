@@ -1,6 +1,4 @@
-﻿using Blog.Domain.Models;
-using MediatR;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Blog.Application.Dtos
 {
