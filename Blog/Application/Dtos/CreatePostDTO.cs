@@ -11,8 +11,5 @@ namespace Blog.Application.Dtos
 
         [Required]
         public string Content { get; set; }
-
-        [Required]
-        public string AuthorId { get; set; }
     }
 }

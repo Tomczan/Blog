@@ -44,7 +44,6 @@ namespace Blog.Web.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize]
         public async Task<IActionResult> GetPostById(string id)
         {
             var query = new GetPostByIdQuery(id);
@@ -53,9 +52,11 @@ namespace Blog.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreatePost(CreatePostDTO postData)
         {
-            var command = new CreatePostCommand(postData);
+            var userLogin = User.FindFirst(ClaimTypes.Name).Value;
+            var command = new CreatePostCommand(postData, userLogin);
             var result = await _mediator.Send(command);
             return Created("Post created successfully", result);
         }

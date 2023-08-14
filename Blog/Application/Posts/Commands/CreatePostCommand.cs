@@ -14,13 +14,13 @@ namespace Blog.Application.Posts.Commands
         public string Content { get; set; }
 
         [Required]
-        public string AuthorId { get; set; }
+        public string UserLogin { get; set; }
 
-        public CreatePostCommand(CreatePostDTO postData)
+        public CreatePostCommand(CreatePostDTO postData, string userLogin)
         {
             Title = postData.Title;
             Content = postData.Content;
-            AuthorId = postData.AuthorId;
+            UserLogin = userLogin;
         }
     }
 }
