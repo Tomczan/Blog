@@ -5,7 +5,9 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog", "Blog\Blog.csproj", "{8D082D94-A8A9-4FBF-A2DB-14F612B2A412}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TranslatorApp", "TranslatorApp\TranslatorApp.csproj", "{5E001BE0-4A16-4F11-BF6C-CFBE3C86B28F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TranslatorApp", "TranslatorApp\TranslatorApp.csproj", "{5E001BE0-4A16-4F11-BF6C-CFBE3C86B28F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.UnitTests", "Blog.UnitTests\Blog.UnitTests.csproj", "{5B1908A8-72EE-4486-A49D-56239E4DD000}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{5E001BE0-4A16-4F11-BF6C-CFBE3C86B28F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E001BE0-4A16-4F11-BF6C-CFBE3C86B28F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E001BE0-4A16-4F11-BF6C-CFBE3C86B28F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B1908A8-72EE-4486-A49D-56239E4DD000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B1908A8-72EE-4486-A49D-56239E4DD000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B1908A8-72EE-4486-A49D-56239E4DD000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B1908A8-72EE-4486-A49D-56239E4DD000}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
