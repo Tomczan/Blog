@@ -1,5 +1,5 @@
-﻿using Blog.Application.Dtos;
-using Blog.Domain.Models;
+﻿using Blog.Domain.Models;
+using Blog.Web.Requests;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -9,7 +9,7 @@ namespace Blog.Infrastructure.Filters
     {
         //https://stackoverflow.com/questions/32227284/mongo-c-sharp-driver-building-filter-dynamically-with-nesting
         //https://www.mongodb.com/docs/drivers/csharp/current/fundamentals/builders/
-        public FilterDefinition<Post> GetPostsFilter(PostQueryParamsDTO query, User? user = null)
+        public FilterDefinition<Post> GetPostsFilter(PostQueryParametersRequest query, string userId = "")
         {
             var builder = Builders<Post>.Filter;
             var filters = builder.Empty;
@@ -25,9 +25,9 @@ namespace Blog.Infrastructure.Filters
                 filters &= builder.Gt(post => post.CreatedDate, query.CreatedDate);
             }
 
-            if (user != null)
+            if (!String.IsNullOrEmpty(userId))
             {
-                filters &= builder.Where(post => post.AuthorId == user.Id);
+                filters &= builder.Where(post => post.AuthorId == userId);
             }
 
             return filters;

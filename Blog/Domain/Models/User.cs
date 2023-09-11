@@ -10,7 +10,7 @@ namespace Blog.Domain.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string? Id { get; set; }
+        public string Id { get; set; }
 
         [Required]
         public string Login { get; set; }

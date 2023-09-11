@@ -1,6 +1,6 @@
-﻿using Blog.Application.Dto;
-using Blog.Application.Interfaces;
+﻿using Blog.Application.Interfaces;
 using Blog.Infrastructure.Services;
+using Blog.Web.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Web.Controllers
@@ -9,10 +9,10 @@ namespace Blog.Web.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserService _userService;
+        private readonly IUserRepository _userService;
         private readonly IAuthService _authService;
 
-        public UserController(UserService userService, IAuthService authService)
+        public UserController(IUserRepository userService, IAuthService authService)
         {
             _userService = userService;
             _authService = authService;
@@ -21,7 +21,7 @@ namespace Blog.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
-            var users = await _userService.GetAllUsers();
+            var users = await _userService.GetAllUsersAsync();
 
             return Ok(users);
         }
@@ -29,21 +29,21 @@ namespace Blog.Web.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(string id)
         {
-            var user = await _userService.GetUser(id);
+            var user = await _userService.GetUserByIdAsync(id);
 
             return Ok(user);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] LoginDTO loginData)
+        public async Task<IActionResult> CreateUser([FromBody] UserLoginRequest request)
         {
-            if (string.IsNullOrEmpty(loginData.Login) || string.IsNullOrEmpty(loginData.Password))
+            if (string.IsNullOrEmpty(request.Login) || string.IsNullOrEmpty(request.Password))
             {
                 return BadRequest("login and password are required.");
             }
             try
             {
-                var user = await _userService.CreateUser(loginData.Login, loginData.Password);
+                var user = await _userService.CreateAsync(request.Login, request.Password);
                 return Created("User successfully created", user);
             }
             catch (Exception ex)
@@ -53,9 +53,9 @@ namespace Blog.Web.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDTO loginData)
+        public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {
-            var user = await _userService.Login(loginData.Login, loginData.Password);
+            var user = await _userService.LoginAsync(request.Login, request.Password);
 
             return user != null ? Ok(_authService.CreateJwtToken(user)) : NotFound("User not found.");
         }

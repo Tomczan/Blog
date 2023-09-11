@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Blog.Application.Dto
+namespace Blog.Web.Requests
 {
-    public class LoginDTO
+    public class UserLoginRequest
     {
         [Required]
         public string Login { get; set; } = null!;

@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <Folder Include="Application\Auth\" />
+    <Folder Include="Application\Dtos\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

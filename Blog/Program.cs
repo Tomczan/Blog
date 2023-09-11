@@ -46,8 +46,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 });
 
 builder.Services.AddScoped<MongoDbFactory>();
-builder.Services.AddScoped<PostService>();
-builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<PostFilters>();
 builder.Services.AddHttpContextAccessor();
@@ -56,7 +56,7 @@ builder.Services.AddScoped(provider =>
     var channel = GrpcChannel.ForAddress("https://localhost:7027");
     return new Translator.TranslatorClient(channel);
 });
-builder.Services.AddScoped<TranslatorService>();
+builder.Services.AddScoped<ITranslatorService, TranslatorService>();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 

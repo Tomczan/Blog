@@ -1,10 +1,10 @@
-﻿using Blog.Application.Dtos;
-using Blog.Application.Posts.Commands;
+﻿using Blog.Application.Posts.Commands;
 using Blog.Application.Posts.Queries;
-using Blog.Infrastructure.Services;
+using Blog.Web.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Blog.Web.Controllers
 {
@@ -12,17 +12,17 @@ namespace Blog.Web.Controllers
     [ApiController]
     public class PostController : ControllerBase
     {
-        private readonly PostService _postService;
         private readonly IMediator _mediator;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public PostController(PostService postService, IMediator mediator)
+        public PostController(IMediator mediator, IHttpContextAccessor contextAccessor)
         {
-            _postService = postService;
             _mediator = mediator;
+            _contextAccessor = contextAccessor;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPosts([FromQuery] PostQueryParamsDTO postParams)
+        public async Task<IActionResult> GetPosts([FromQuery] PostQueryParametersRequest postParams)
         {
             var query = new GetPostsQuery(postParams);
             var result = await _mediator.Send(query);
@@ -31,7 +31,7 @@ namespace Blog.Web.Controllers
 
         [HttpGet("my-posts/")]
         [Authorize]
-        public async Task<IActionResult> GetPostsByAuthor([FromQuery] PostQueryParamsDTO postParams)
+        public async Task<IActionResult> GetPostsByAuthor([FromQuery] PostQueryParametersRequest postParams)
         {
             var query = new GetPostsByAuthorQuery(postParams);
             var result = await _mediator.Send(query);
@@ -48,25 +48,29 @@ namespace Blog.Web.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> CreatePost(CreatePostDTO postData)
+        public async Task<IActionResult> CreatePost(CreatePostRequest request)
         {
-            var command = new CreatePostCommand(postData);
+            var command = new CreatePostCommand(request);
             var result = await _mediator.Send(command);
             return Created("Post created successfully", result);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdatePost(string id, string title, string content, string authorId)
+        [Authorize]
+        public async Task<IActionResult> UpdatePost(UpdatePostRequest request)
         {
-            var post = await _postService.UpdatePost(id, title, content, authorId);
+            var authorId = _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var command = new UpdatePost.Command(request.PostId, request.Title, request.Content, authorId);
+            var result = await _mediator.Send(command);
 
-            return Ok(post);
+            return Ok(result);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePost(string id)
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> DeletePost(string postId)
         {
-            var command = new DeletePostCommand(id);
+            var command = new DeletePostCommand(postId);
             var result = await _mediator.Send(command);
             return Ok(result);
         }

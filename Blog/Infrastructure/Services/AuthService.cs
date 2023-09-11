@@ -19,7 +19,8 @@ namespace Blog.Infrastructure.Services
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.Login)
+                new Claim(ClaimTypes.Name, user.Login),
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(

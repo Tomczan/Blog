@@ -1,15 +1,17 @@
 ﻿using Blog.Domain.Models;
 
-namespace Blog.Application.Interfaces
+namespace Blog.Infrastructure.Services
 {
     public interface IUserRepository
     {
-        Task<List<User>> GetAll();
+        Task<User> CreateAsync(string login, string password, CancellationToken cancellationToken = default);
 
-        Task<User?> GetById(string id);
+        Task<User> GetUserByIdAsync(string id, CancellationToken cancellationToken = default);
 
-        Task<User> Create(User user);
+        Task<List<User>> GetAllUsersAsync(CancellationToken cancellationToken = default);
 
-        //Task<bool> Login(string name, string password);
+        Task<User> LoginAsync(string login, string password, CancellationToken cancellationToken = default);
+
+        Task<bool> DoesUserExistsAsync(string userId, CancellationToken cancellationToken = default);
     }
 }

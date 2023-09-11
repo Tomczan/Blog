@@ -8,11 +8,11 @@ namespace Blog.Application.Posts.QueriesHandlers
 {
     public class GetPostsByAuthorHandler : IRequestHandler<GetPostsByAuthorQuery, List<Post>>
     {
-        private readonly PostService _postService;
-        private readonly UserService _userService;
+        private readonly IPostRepository _postService;
+        private readonly IUserRepository _userService;
         private readonly IHttpContextAccessor _contextAccessor;
 
-        public GetPostsByAuthorHandler(PostService postService, UserService userService, IHttpContextAccessor contextAccessor)
+        public GetPostsByAuthorHandler(IPostRepository postService, IUserRepository userService, IHttpContextAccessor contextAccessor)
         {
             _postService = postService;
             _userService = userService;
@@ -21,9 +21,8 @@ namespace Blog.Application.Posts.QueriesHandlers
 
         public async Task<List<Post>> Handle(GetPostsByAuthorQuery request, CancellationToken cancellationToken)
         {
-            var userLogin = _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
-            var user = await _userService.GetUserByLogin(userLogin);
-            return await _postService.GetPostsByAuthor(request.PostQueryParams, user);
+            var userId = _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return await _postService.GetFilteredPostsByAuthorIdAsync(request.PostQueryParams, userId);
         }
     }
 }

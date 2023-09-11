@@ -7,16 +7,16 @@ namespace Blog.Application.Posts.QueriesHandlers
 {
     public class GetPostsHandler : IRequestHandler<GetPostsQuery, List<Post>>
     {
-        private readonly PostService _postService;
+        private readonly IPostRepository _postService;
 
-        public GetPostsHandler(PostService postService)
+        public GetPostsHandler(IPostRepository postService)
         {
             _postService = postService;
         }
 
         public async Task<List<Post>> Handle(GetPostsQuery request, CancellationToken cancellationToken)
         {
-            return await _postService.GetPosts(request.PostQueryParams);
+            return await _postService.GetFilteredPostsAsync(request.PostQueryParams);
         }
     }
 }

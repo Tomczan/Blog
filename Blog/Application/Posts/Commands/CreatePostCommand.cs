@@ -1,5 +1,5 @@
-﻿using Blog.Application.Dtos;
-using Blog.Domain.Models;
+﻿using Blog.Domain.Models;
+using Blog.Web.Requests;
 using MediatR;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,10 +13,10 @@ namespace Blog.Application.Posts.Commands
         [Required]
         public string Content { get; set; }
 
-        public CreatePostCommand(CreatePostDTO postData)
+        public CreatePostCommand(CreatePostRequest request)
         {
-            Title = postData.Title;
-            Content = postData.Content;
+            Title = request.Title;
+            Content = request.Content;
         }
     }
 }

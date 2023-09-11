@@ -1,6 +1,6 @@
-﻿namespace Blog.Application.Dtos
+﻿namespace Blog.Web.Requests
 {
-    public class PostQueryParamsDTO
+    public class PostQueryParametersRequest
     {
         public string? Title { get; set; }
 

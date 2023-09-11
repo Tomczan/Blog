@@ -8,11 +8,11 @@ namespace Blog.Application.Posts.CommandsHandlers
 {
     public class CreatePostHandler : IRequestHandler<CreatePostCommand, Post>
     {
-        private readonly PostService _postService;
-        private readonly UserService _userService;
+        private readonly IPostRepository _postService;
+        private readonly IUserRepository _userService;
         private readonly IHttpContextAccessor _contextAccessor;
 
-        public CreatePostHandler(PostService postService, UserService userService, IHttpContextAccessor contextAccessor)
+        public CreatePostHandler(IPostRepository postService, IUserRepository userService, IHttpContextAccessor contextAccessor)
         {
             _postService = postService;
             _userService = userService;
@@ -21,9 +21,20 @@ namespace Blog.Application.Posts.CommandsHandlers
 
         public async Task<Post> Handle(CreatePostCommand request, CancellationToken cancellationToken)
         {
-            var userLogin = _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
-            var user = await _userService.GetUserByLogin(userLogin);
-            return await _postService.CreatePost(request.Title, request.Content, user.Id);
+            var userId = _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!await _userService.DoesUserExistsAsync(userId))
+            {
+                throw new Exception("User with that ID does not exists.");
+            }
+
+            var post = Post.Create(request.Title,
+                request.Content,
+                userId);
+
+            await _postService.CreateAsync(post);
+
+            return post;
         }
     }
 }

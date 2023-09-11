@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Blog.Application.Dtos
+namespace Blog.Web.Requests
 {
-    public class CreatePostDTO
+    public class UpdatePostRequest
     {
-        [Required]
+        public string PostId { get; set; }
+
         public string Title { get; set; }
 
-        [Required]
         public string Content { get; set; }
     }
 }

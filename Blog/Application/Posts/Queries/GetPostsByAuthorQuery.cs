@@ -1,14 +1,14 @@
-﻿using Blog.Application.Dtos;
-using Blog.Domain.Models;
+﻿using Blog.Domain.Models;
+using Blog.Web.Requests;
 using MediatR;
 
 namespace Blog.Application.Posts.Queries
 {
     public class GetPostsByAuthorQuery : IRequest<List<Post>>
     {
-        public PostQueryParamsDTO PostQueryParams { get; }
+        public PostQueryParametersRequest PostQueryParams { get; }
 
-        public GetPostsByAuthorQuery(PostQueryParamsDTO postQueryParams)
+        public GetPostsByAuthorQuery(PostQueryParametersRequest postQueryParams)
         {
             PostQueryParams = postQueryParams;
         }
